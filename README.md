@@ -31,3 +31,5 @@ pip install -r requirements.txt
 pip freeze > requirements.txt
 ```
 
+**QUAN TRỌNG**: Mọi người đọc thêm về [PEP 8](https://peps.python.org/pep-0008/) để viết code sạch sẽ hơn mọi người dễ làm việc với nhau hơn.
+
