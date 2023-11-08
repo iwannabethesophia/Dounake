@@ -26,8 +26,8 @@ class GameScreen:
         """
 
         # create snake on the screen
-        self.snake1 = Snake1() # snake 1
-        self.snake2 = Snake2() # snake 2
+        self.snake1 = Snake([Point(2, 0), Point(1, 0), Point(0, 0)], Point(1, 0)) # snake 1
+        self.snake2 = Snake([Point(17, 19), Point(18, 19), Point(19, 19)], Point(-1, 0)) # snake 2
         self.clock = pygame.time.Clock()
         self.fruit = Fruit()
 
@@ -42,8 +42,7 @@ class GameScreen:
                     pygame.quit()
                     sys.exit(0)
 
-                self.handlingDirectionEvent1(event) # event for snake 1
-                self.handlingDirectionEvent2(event) # event for snake 2
+                self.handlingDirectionEvent(event) # event for snake 1
                 
             # handling fruit eat evenet
             if self.snake1.snakePosition[0] == self.fruit: # snake 1
@@ -91,7 +90,7 @@ class GameScreen:
         if head in self.snake2.snakePosition[1:] or head in self.snake1.snakePosition[:] or head.x == -1 or head.x == 20 or head.y == -1 or head.y == 20:
             self.gameRunning = False
 
-    def drawBareboneSnake1(self, snake: Snake1) -> None:
+    def drawBareboneSnake1(self, snake: Snake) -> None:
         """
         draw barebone snake without any sprite and animation into the screen only rect usage
 
@@ -105,7 +104,7 @@ class GameScreen:
 
         pygame.draw.rect(self.screen, (255, 0, 0), self.fruit.axisToRect(20))
 
-    def drawBareboneSnake2(self, snake: Snake2) -> None:
+    def drawBareboneSnake2(self, snake: Snake) -> None:
         """
         draw barebone snake without any sprite and animation into the screen only rect usage
 
@@ -113,13 +112,13 @@ class GameScreen:
         """
 
         snakePositionVector = self.snake2.snakePosition
-        pygame.draw.rect(self.screen, (200, 255, 0), snakePositionVector[0].axisToRect(20))
+        pygame.draw.rect(self.screen, (200, 0, 255), snakePositionVector[0].axisToRect(20))
         for i in range(1, len(snakePositionVector)):
-            pygame.draw.rect(self.screen, (0, 255, 0), snakePositionVector[i].axisToRect(20))
+            pygame.draw.rect(self.screen, (0, 0, 255), snakePositionVector[i].axisToRect(20))
 
         pygame.draw.rect(self.screen, (255, 0, 0), self.fruit.axisToRect(20))
 
-    def handlingDirectionEvent1(self, event: pygame.event.Event) -> None:
+    def handlingDirectionEvent(self, event: pygame.event.Event) -> None:
         """
         handling event when WASD pressed(for snake 1)
 
@@ -131,21 +130,9 @@ class GameScreen:
             pygame.K_a: Point(-1, 0),
             pygame.K_d: Point(1, 0)
         }
-        # if event key is direction key pressed on the keyboard
-        if event.type == pygame.KEYDOWN:
-            if event.key in directionEvent:
-                curDirection, newDirection = self.snake1.snakeDirection, directionEvent[event.key]
-                if abs(curDirection.x) != abs(newDirection.x) or abs(curDirection.y) != abs(newDirection.y):
-                    self.snake1.snakeDirection = newDirection
-                    
 
-    def handlingDirectionEvent2(self, event: pygame.event.Event) -> None:
-        """
-        handling event when Direction key pressed(for snake 2)
-
-        @param event: Event for handling
-        """
-        directionEvent = {
+        # direction event for snake 2
+        directionEvent2 = {
             pygame.K_UP: Point(0, -1),
             pygame.K_DOWN: Point(0, 1),
             pygame.K_LEFT: Point(-1, 0),
@@ -154,6 +141,10 @@ class GameScreen:
         # if event key is direction key pressed on the keyboard
         if event.type == pygame.KEYDOWN:
             if event.key in directionEvent:
-                curDirection, newDirection = self.snake2.snakeDirection, directionEvent[event.key]
+                curDirection, newDirection = self.snake1.snakeDirection, directionEvent[event.key]
+                if abs(curDirection.x) != abs(newDirection.x) or abs(curDirection.y) != abs(newDirection.y):
+                    self.snake1.snakeDirection = newDirection
+            if event.key in directionEvent2:
+                curDirection, newDirection = self.snake2.snakeDirection, directionEvent2[event.key]
                 if abs(curDirection.x) != abs(newDirection.x) or abs(curDirection.y) != abs(newDirection.y):
                     self.snake2.snakeDirection = newDirection
