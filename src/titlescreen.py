@@ -43,7 +43,7 @@ def options():
 
         SCREEN.blit(BG, (0, 0))
 
-        OPTIONS_BACK = Button(image=None, pos=(50, 20), 
+        OPTIONS_BACK = Button(image=None, pos=(60, 30), 
                              text_input="BACK", font=get_font(20), base_color="white", hovering_color="green")
 
         OPTIONS_BACK.changeColor(OPTIONS_MOUSE_POS)
