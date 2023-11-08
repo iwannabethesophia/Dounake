@@ -1,0 +1,37 @@
+import pygame
+import random
+
+# Create snake
+snake1 = [(50, 50), (40, 50), (30, 50)]
+snake2 = [(350, 350), (360, 350), (370, 350)]
+snake1_direction = 'RIGHT'
+snake2_direction = 'LEFT'
+
+# The maximum distance to count is that the snake ate the apple
+collision_distance = 20
+
+# Conllision check function
+num_apples = 5
+def check_collision(snake_x, snake_y, apples):
+    for apple in apples:
+        distance = ((snake_x - apple[0])**2 + (snake_y - apple[1])**2) ** 0.5
+        if distance < collision_distance:
+            apples.remove(apple)
+            new_apple = (random.randint(0, screen_width), random.randint(0, screen_height))  # Create new apple randomly
+            apples.append(new_apple)
+
+# List apple
+apples = [(random.randint(0, screen_width), random.randint(0, screen_height)) for _ in range(num_apples)]
+
+    
+    # Check collision of first player
+    if snake1[0] in snake2:
+        running = False
+
+    # Check collision of 2rd player
+    if snake2[0] in snake1:
+        running = False
+    
+    # Immpliment collision with screen 
+    if (snake1[0][0] >= width or snake1[0][0] < 0 or snake1[0][1] >= height or snake1[0][1] < 0) or (snake2[0][0] >= width or snake2[0][0] < 0 or snake2[0][1] >= height or snake2[0][1] < 0):
+            running = False
