@@ -22,7 +22,7 @@ class Snake:
         # current snake direction
         self.snakeDirection = direction
 
-        # a vector storing list of postition
+        # a vector storing list of position
         # for a map with 20x20 head at position (x, y) = (0, 2)
         self.snakePosition = startPos
 
