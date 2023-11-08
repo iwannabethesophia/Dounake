@@ -26,7 +26,7 @@ class GameScreen:
         """
 
         # create snake on the screen
-        self.snake = Snake()
+        self.snake = Snake1()
         self.clock = pygame.time.Clock()
         self.fruit = Fruit()
 
@@ -59,7 +59,7 @@ class GameScreen:
             self.clock.tick(144)
             pygame.display.update()
 
-    def handlingCollision(self, snake):
+    def handlingCollision(self, snake1):
         """
         handling collistion for snake
         """
@@ -67,7 +67,7 @@ class GameScreen:
         if head in self.snake.snakePosition[1:] or head.x == -1 or head.x == 20 or head.y == -1 or head.y == 20:
             self.gameRunning = False
 
-    def drawBareboneSnake(self, snake: Snake) -> None:
+    def drawBareboneSnake(self, snake: Snake1) -> None:
         """
         draw barebone snake without any sprite and animation into the screen only rect usage
 
@@ -88,10 +88,10 @@ class GameScreen:
         @param event: Event for handling
         """
         directionEvent = {
-            pygame.K_UP: Point(0, -1),
-            pygame.K_DOWN: Point(0, 1),
-            pygame.K_LEFT: Point(-1, 0),
-            pygame.K_RIGHT: Point(1, 0)
+            pygame.K_w: Point(0, -1),
+            pygame.K_s: Point(0, 1),
+            pygame.K_a: Point(-1, 0),
+            pygame.K_d: Point(1, 0)
         }
         # if event key is direction key pressed on the keyboard
         if event.type == pygame.KEYDOWN:
