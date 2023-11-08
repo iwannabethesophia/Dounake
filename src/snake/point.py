@@ -43,7 +43,7 @@ class Point:
     
     def __eq__(self, other):
         """
-        equal opeartor overloading
+        equal operator overloading
 
         @param other: another point
 
