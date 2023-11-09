@@ -144,11 +144,11 @@ def options(): # Recommend define all the button outside then connect them into 
         # BGM changing button
         global bgm_stat
         if (bgm_stat == True):
-            pygame.mixer.music.unpause()
+            pygame.mixer.music.set_volume(100)
             BGM_STAT = Button(image=None, pos=(250, 350), 
                             text_input="ON", font=get_font(30), base_color=WHITE, hovering_color=GREEN)
         else:
-            pygame.mixer.music.pause()
+            pygame.mixer.music.set_volume(0)
             BGM_STAT = Button(image=None, pos=(250, 350), 
                             text_input="OFF", font=get_font(30), base_color=WHITE, hovering_color=GREEN)
         BGM_STAT.changeColor(OPTIONS_MOUSE_POS)
