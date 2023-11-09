@@ -1,14 +1,22 @@
 import pygame
 import sys
-import os # To scan for assets
+import os
 
 from button import Button
 
 pygame.init()
 # Display screen could be change later.
-# 200x200 should be for gameplay. The window screen should be larger
+# 400x400 should be for gameplay. The window screen should be larger
 SCREEN_WIDTH = 400
 SCREEN_HEIGHT = 400
+
+#load and play loaded song indefinitely
+pygame.mixer.music.load('src/assets/bgm.mp3')
+pygame.mixer.music.play(-1)
+
+#load menu's sfx
+sfx_confirm = pygame.mixer.Sound('src/assets/confirm.ogg')
+sfx_back = pygame.mixer.Sound('src/assets/back.ogg')
 
 #Color
 BLACK = (0,0,0)
@@ -17,8 +25,10 @@ RED = (255,0,0)
 GREEN = (0,128,0)
 MENU_TEXT_COLOR = (182,143,64)
 
+#global variables for controlling music and sfx
 bgm_stat = True
 sfx_stat = True
+
 
 SCREEN = pygame.display.set_mode((SCREEN_HEIGHT, SCREEN_WIDTH))
 pygame.display.set_caption("Dounake")
@@ -118,18 +128,27 @@ def options(): # Recommend define all the button outside then connect them into 
         if (sfx_stat == True):
             SFX_STAT = Button(image=None, pos=(250, 300), 
                             text_input="ON", font=get_font(30), base_color=WHITE, hovering_color=GREEN)
+            #turned on sfx
+            sfx_confirm.set_volume(100)
+            sfx_back.set_volume(100)
+            
         else:
             SFX_STAT = Button(image=None, pos=(250, 300), 
                             text_input="OFF", font=get_font(30), base_color=WHITE, hovering_color=GREEN)
+            #turned off sfx
+            sfx_confirm.set_volume(0)
+            sfx_back.set_volume(0)
         SFX_STAT.changeColor(OPTIONS_MOUSE_POS)
         SFX_STAT.update(SCREEN)
         
         # BGM changing button
         global bgm_stat
         if (bgm_stat == True):
+            pygame.mixer.music.unpause()
             BGM_STAT = Button(image=None, pos=(250, 350), 
                             text_input="ON", font=get_font(30), base_color=WHITE, hovering_color=GREEN)
         else:
+            pygame.mixer.music.pause()
             BGM_STAT = Button(image=None, pos=(250, 350), 
                             text_input="OFF", font=get_font(30), base_color=WHITE, hovering_color=GREEN)
         BGM_STAT.changeColor(OPTIONS_MOUSE_POS)
@@ -142,13 +161,16 @@ def options(): # Recommend define all the button outside then connect them into 
                 sys.exit()
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if OPTIONS_BACK.checkForInput(OPTIONS_MOUSE_POS):
+                    sfx_back.play()
                     main_menu()
                 if SFX_STAT.checkForInput(OPTIONS_MOUSE_POS):
+                    sfx_confirm.play()
                     if sfx_stat == True:
                         sfx_stat = False
                     else:
                         sfx_stat = True
                 if BGM_STAT.checkForInput(OPTIONS_MOUSE_POS):
+                    sfx_confirm.play()
                     if bgm_stat == True:
                         bgm_stat = False
                     else:
@@ -184,10 +206,13 @@ def main_menu():
                 sys.exit()
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if PLAY_BUTTON.checkForInput(MENU_MOUSE_POS):
+                    sfx_confirm.play()
                     play()
                 if OPTIONS_BUTTON.checkForInput(MENU_MOUSE_POS):
+                    sfx_confirm.play()
                     options()
                 if QUIT_BUTTON.checkForInput(MENU_MOUSE_POS):
+                    sfx_confirm.play()
                     pygame.quit()
                     sys.exit()
 

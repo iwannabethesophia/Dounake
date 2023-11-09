@@ -1,7 +1,9 @@
 import pygame
 import sys
+import os
 
 from snake import *
+
 
 class GameScreen:
     """
@@ -14,13 +16,23 @@ class GameScreen:
     
     # Color
     BLACK = (0,0,0)
+    WHITE = (255, 255, 255)
     HEAD_SNAKE1_COLOR = (120, 0, 0)
     BODY_SNAKE1_COLOR = (193, 18, 31)
     FRUIT_COLOR = (253, 240, 213)
     HEAD_SNAKE2_COLOR = (26, 83, 92)
     BODY_SNAKE2_COLOR = (102, 155, 188)
     
-    
+    #collision status
+    COLLISION_STAT = -1 #0 = Tie, 1 = P1 win, 2 = P2 win
+    #game status
+    STAT_SIZE = 20
+    STAT_COLOR = (255, 255, 255)
+    STAT_BORDER_COLOR = (255, 0, 0)
+    STAT_POS = (145, 190)
+    STAT_GAME = False #True: Game Over
+
+
     def __init__(self, gameTitle: str):
         """
         Initialize game screen
@@ -70,17 +82,40 @@ class GameScreen:
                 self.snake2.snakePosition.append(Point(-1, -1))
                 self.fruit.nextFruitPosition()
                 while (self.fruit in self.snake2.snakePosition):
-                    self.fruit.nextFruitPosition()
+                    if not self.STAT_GAME:
+                        self.fruit.nextFruitPosition()
 
             self.handlingCollision2(self.snake2)
 
             self.screen.fill(self.BLACK) # Background
             
-            self.drawBareboneSnake1(self.snake1) # Draw snake 1
-            self.drawBareboneSnake2(self.snake2) # Draw snake 2
-            
-            self.snake1.updateSnakeByDirection()
-            self.snake2.updateSnakeByDirection()
+            #game over
+            if self.COLLISION_STAT != -1:
+                get_font = pygame.font.Font(os.path.join('src','assets', 'font.ttf'), self.STAT_SIZE)
+                if self.COLLISION_STAT == 0:
+                    text = get_font.render('TIE', True, self.STAT_COLOR, self.STAT_BORDER_COLOR)
+                elif self.COLLISION_STAT == 1:
+                    text = get_font.render('P1 Win', True, self.STAT_COLOR, self.STAT_BORDER_COLOR)
+                elif self.COLLISION_STAT == 2:
+                    text = get_font.render('P2 Win', True, self.STAT_COLOR, self.STAT_BORDER_COLOR)
+                self.screen.blit(text, self.STAT_POS)
+                events = pygame.event.get()
+                for event in events:
+                    if event.type == pygame.K_SPACE:
+                        #return to titlescreen, but will be done later
+                        pygame.quit()
+                        sys.exit()
+                    if event.type == pygame.KEYDOWN and event.type == pygame.QUIT:
+                        pygame.quit()
+                        sys.exit() 
+            if (self.STAT_GAME == False):
+                self.drawBareboneSnake1(self.snake1) # Draw snake 1
+                self.drawBareboneSnake2(self.snake2) # Draw snake 2
+
+                self.snake1.updateSnakeByDirection()
+                self.snake2.updateSnakeByDirection()
+
+
             pygame.display.update() 
             self.fps.tick(self.FPS)  # Speed of Snake
 
@@ -90,7 +125,12 @@ class GameScreen:
         """
         head = self.snake1.snakePosition[0]
         if head in self.snake1.snakePosition[1:] or head in self.snake2.snakePosition[:] or head.x == -1 or head.x == 20 or head.y == -1 or head.y == 20:
-            self.gameRunning = False
+            if head == self.snake2.snakePosition[0]:
+                self.COLLISION_STAT = 0
+            else:
+                self.COLLISION_STAT = 2
+            self.STAT_GAME = True
+            return
     
     def handlingCollision2(self, snake2): # Collision for snake 2
         """
@@ -98,7 +138,12 @@ class GameScreen:
         """
         head = self.snake2.snakePosition[0]
         if head in self.snake2.snakePosition[1:] or head in self.snake1.snakePosition[:] or head.x == -1 or head.x == 20 or head.y == -1 or head.y == 20:
-            self.gameRunning = False
+            if head == self.snake1.snakePosition[0]:
+                self.COLLISION_STAT = 0
+            else:
+                self.COLLISION_STAT = 1
+            self.STAT_GAME = True
+            return
 
     def drawBareboneSnake1(self, snake: Snake) -> None:
         """
