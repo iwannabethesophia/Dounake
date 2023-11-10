@@ -26,7 +26,7 @@ for segment in snake1[1:]:
     if snake2[0] == segment:
         running = False
     
-    # Immpliment collision with screen 
+    # Implement collision with screen 
 if (snake1[0][0] >= width or snake1[0][0] < 0 or snake1[0][1] >= height or snake1[0][1] < 0) or (snake2[0][0] >= width or snake2[0][0] < 0 or snake2[0][1] >= height or snake2[0][1] < 0):
     running = False
 
