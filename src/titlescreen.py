@@ -3,6 +3,7 @@ import sys
 import os
 
 from button import Button
+from screen import GameScreen
 
 class TitleScreen:
     SCREEN_WIDTH = 400
@@ -40,7 +41,9 @@ class TitleScreen:
         return pygame.font.Font(os.path.join('src','assets', 'font.ttf'), size)
 
     def play(self): # The play button (on maintain :<).  Need to connect to the main.py
-        print("Hello, this is play button")
+        # print("Hello, this is play button")
+        play_game = GameScreen("Dounake")
+        play_game.gameLoop()
 
     def options(self): # Recommend define all the button outside then connect them into options!!!
         while True:
