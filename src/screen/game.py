@@ -9,8 +9,8 @@ class GameScreen:
     """
     Game screen class to handling screen during game operation
     """
-    scr_height = 500 # Game screen height size
-    scr_weight = 500 # Game screen width size
+    SCREEN_HEIGHT = 500 # Game screen height size
+    SCREEN_WIDTH = 500 # Game screen width size
     
     FPS = 10 # Speed of Snake
     
@@ -24,13 +24,14 @@ class GameScreen:
     BODY_SNAKE2_COLOR = (102, 155, 188)
     
     #collision status
-    COLLISION_STAT = -1 #0 = Tie, 1 = P1 win, 2 = P2 win
-    #game status
+    COLLISION_STAT = -1 # 0 = Tie, 1 = P1 win, 2 = P2 win
+    
+    # Game status
     STAT_SIZE = 20
     STAT_COLOR = (255, 255, 255)
     STAT_BORDER_COLOR = (255, 0, 0)
     STAT_POS = (145, 190)
-    STAT_GAME = False #True: Game Over
+    STAT_GAME = False # True: Game Over
 
 
     def __init__(self, gameTitle: str):
@@ -41,7 +42,7 @@ class GameScreen:
         """
         pygame.init() # Initialize pygame
 
-        self.screen = pygame.display.set_mode((self.scr_height, self.scr_weight)) # Set mode for game window
+        self.screen = pygame.display.set_mode((self.SCREEN_HEIGHT, self.SCREEN_WIDTH)) # Set mode for game window
         pygame.display.set_caption(gameTitle) # Set caption and title for game's window
 
     def gameLoop(self) -> None:
@@ -50,7 +51,7 @@ class GameScreen:
         """
 
         # Create snake on the screen
-        self.snake1 = Snake([Point(2, 0), Point(1, 0), Point(0, 0)], Point(1, 0)) 
+        self.snake1 = Snake([Point(2, 3), Point(1, 3), Point(0, 3)], Point(1, 0)) 
         self.snake2 = Snake([Point(17, 19), Point(18, 19), Point(19, 19)], Point(-1, 0)) 
         self.fps = pygame.time.Clock()
         self.fruit = Fruit()
@@ -92,23 +93,23 @@ class GameScreen:
             self.screen.fill(self.BLACK) # Background
 
 
-            #draw score
+            # Draw score
             score_font = pygame.font.Font(os.path.join('src','assets', 'font.ttf'), 15)
             score_text = score_font.render('Score:', False, self.WHITE)
             p1_score = score_font.render(str(self.snake1.snakePoint), False, self.WHITE)
             p2_score = score_font.render(str(self.snake2.snakePoint), False, self.WHITE)
-            #draw if not game over
+            # Draw if not game over
             if not self.STAT_GAME:
-                #draw player 1 score
+                # Draw player 1 score
                 self.screen.blit(score_text, (15, 10))
                 self.screen.blit(p1_score, (105, 10))
-                #draw player 2 score
+                # Draw player 2 score
                 self.screen.blit(score_text, (385, 10))
                 self.screen.blit(p2_score, (475, 10))
-                #else draw if game over
-                #draw both players's score
+                # Else draw if game over
+                # Draw both players's score
             
-            #game over
+            # Game over
             if self.COLLISION_STAT != -1:
                 get_font = pygame.font.Font(os.path.join('src','assets', 'font.ttf'), self.STAT_SIZE)
                 if self.COLLISION_STAT == 0:
@@ -119,21 +120,23 @@ class GameScreen:
                     text = get_font.render('P2 Win', True, self.STAT_COLOR, self.STAT_BORDER_COLOR)
                 self.screen.blit(text, self.STAT_POS)
                 events = pygame.event.get()
+                ########################
                 for event in events:
                     if event.type == pygame.K_SPACE:
-                        #return to titlescreen, but will be done later
+                        # Return to title screen, but will be done later
                         pygame.quit()
                         sys.exit()
+                ########################
                     if event.type == pygame.KEYDOWN and event.type == pygame.QUIT:
                         pygame.quit()
                         sys.exit() 
+
             if (self.STAT_GAME == False):
                 self.drawBareboneSnake1(self.snake1) # Draw snake 1
                 self.drawBareboneSnake2(self.snake2) # Draw snake 2
 
                 self.snake1.updateSnakeByDirection()
                 self.snake2.updateSnakeByDirection()
-
 
             pygame.display.update() 
             self.fps.tick(self.FPS)  # Speed of Snake
