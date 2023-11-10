@@ -28,5 +28,3 @@ class Button():
 			self.text = self.font.render(self.text_input, True, self.hovering_color)
 		else:
 			self.text = self.font.render(self.text_input, True, self.base_color)
-	def is_hovered(self, mouse_pos):
-		return self.rect.collidepoint(mouse_pos)

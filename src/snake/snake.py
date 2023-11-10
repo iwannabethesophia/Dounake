@@ -13,6 +13,7 @@ class Snake:
         """
 
         self.snakeLength = 3 #default snake length
+        self.snakePoint = 0
         assert self.snakeLength == len(startPos)
         # x, y
         # 0, 1 -> down

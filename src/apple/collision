@@ -6,6 +6,8 @@ snake1 = [(50, 50), (40, 50), (30, 50)]
 snake2 = [(350, 350), (360, 350), (370, 350)]
 snake1_direction = 'RIGHT'
 snake2_direction = 'LEFT'
+width = 400
+height = 400
 
 # Create apple
 apples = []

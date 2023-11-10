@@ -9,8 +9,8 @@ class GameScreen:
     """
     Game screen class to handling screen during game operation
     """
-    scr_height = 400 # Game screen height size
-    scr_weight = 400 # Game screen width size
+    scr_height = 500 # Game screen height size
+    scr_weight = 500 # Game screen width size
     
     FPS = 10 # Speed of Snake
     
@@ -65,10 +65,11 @@ class GameScreen:
                     sys.exit(0)
 
                 self.handlingDirectionEvent(event) # Event for snake 1
-                
+            
             # handling fruit eat event
             if self.snake1.snakePosition[0] == self.fruit: # Snake 1
                 self.snake1.snakeLength += 1
+                self.snake1.snakePoint +=1
                 self.snake1.snakePosition.append(Point(-1, -1))
                 self.fruit.nextFruitPosition()
                 while (self.fruit in self.snake1.snakePosition):
@@ -79,6 +80,7 @@ class GameScreen:
 
             if self.snake2.snakePosition[0] == self.fruit: # Snake 2
                 self.snake2.snakeLength += 1
+                self.snake2.snakePoint += 1
                 self.snake2.snakePosition.append(Point(-1, -1))
                 self.fruit.nextFruitPosition()
                 while (self.fruit in self.snake2.snakePosition):
@@ -88,6 +90,23 @@ class GameScreen:
             self.handlingCollision2(self.snake2)
 
             self.screen.fill(self.BLACK) # Background
+
+
+            #draw score
+            score_font = pygame.font.Font(os.path.join('src','assets', 'font.ttf'), 15)
+            score_text = score_font.render('Score:', False, self.WHITE)
+            p1_score = score_font.render(str(self.snake1.snakePoint), False, self.WHITE)
+            p2_score = score_font.render(str(self.snake2.snakePoint), False, self.WHITE)
+            #draw if not game over
+            if not self.STAT_GAME:
+                #draw player 1 score
+                self.screen.blit(score_text, (15, 10))
+                self.screen.blit(p1_score, (105, 10))
+                #draw player 2 score
+                self.screen.blit(score_text, (385, 10))
+                self.screen.blit(p2_score, (475, 10))
+                #else draw if game over
+                #draw both players's score
             
             #game over
             if self.COLLISION_STAT != -1:
