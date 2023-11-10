@@ -6,41 +6,43 @@ from button import Button
 from screen import GameScreen
 
 class TitleScreen:
+    # Display screen could be change later.
+    # 400x400 should be for gameplay. The window screen should be larger
+    # The Title screen should follow the width and height window of gameplay.
     SCREEN_WIDTH = 400
     SCREEN_HEIGHT = 400
 
-    #Color
+    # Color
     BLACK = (0,0,0)
     WHITE = (255,255,255)
     RED = (255,0,0)
     GREEN = (0,128,0)
     MENU_TEXT_COLOR = (182,143,64)
 
-    #global variables for controlling music and sfx
+    # Global variables for controlling music and sfx
     bgm_stat = True
     sfx_stat = True
 
     BG = pygame.transform.scale(pygame.image.load(
-        os.path.join('src','assets', 'Background.png')),(SCREEN_HEIGHT,SCREEN_WIDTH))
+        os.path.join('src', 'assets', 'Background.png')),(SCREEN_HEIGHT,SCREEN_WIDTH))
     
     def __init__(self):
         pygame.init()
-        #load and play loaded song indefinitely
-        pygame.mixer.music.load('src/assets/bgm.mp3')
+        # Load and play loaded song indefinitely
+        pygame.mixer.music.load(os.path.join('src', 'assets', 'bgm.mp3'))
         pygame.mixer.music.play(-1)
-        #load menu's sfx
-        self.sfx_confirm = pygame.mixer.Sound('src/assets/confirm.ogg')
-        self.sfx_back = pygame.mixer.Sound('src/assets/back.ogg')
+        # Load menu's sfx
+        self.sfx_confirm = pygame.mixer.Sound(os.path.join('src', 'assets', 'confirm.ogg'))
+        self.sfx_back = pygame.mixer.Sound(os.path.join('src', 'assets', 'back.ogg'))
 
-        # Display screen could be change later.
-        # 400x400 should be for gameplay. The window screen should be larger
         self.SCREEN = pygame.display.set_mode((self.SCREEN_HEIGHT, self.SCREEN_WIDTH))
         pygame.display.set_caption("Dounake")
 
     def get_font(self, size): # Returns Press-Start-2P in the desired size
         return pygame.font.Font(os.path.join('src','assets', 'font.ttf'), size)
 
-    def play(self): # The play button (on maintain :<).  Need to connect to the main.py
+    def play(self): 
+        # The play button (on maintain :<).  Need to connect to the main.py
         # print("Hello, this is play button")
         play_game = GameScreen("Dounake")
         play_game.gameLoop()
