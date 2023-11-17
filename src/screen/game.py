@@ -9,14 +9,19 @@ class GameScreen:
     """
     Game screen class to handling screen during game operation
     """
-    SCREEN_HEIGHT = 500 # Game screen height size
-    SCREEN_WIDTH = 500 # Game screen width size
+    SCREEN_HEIGHT = 650 # Game screen height size 31x31
+    SCREEN_WIDTH = 650 # Game screen width size 31x31
     
     FPS = 10 # Speed of Snake
     
     # Color
     BLACK = (0,0,0)
     WHITE = (255, 255, 255)
+    GREEN = (0,255,0)
+    YELLOW = (255,255,0)
+    RED = (255,0,0)
+    CYAN = (2,243,229)
+    FONT_COLOUR = (239,84,85)
     HEAD_SNAKE1_COLOR = (120, 0, 0)
     BODY_SNAKE1_COLOR = (193, 18, 31)
     FRUIT_COLOR = (253, 240, 213)
@@ -51,8 +56,8 @@ class GameScreen:
         """
 
         # Create snake on the screen
-        self.snake1 = Snake([Point(2, 3), Point(1, 3), Point(0, 3)], Point(1, 0)) 
-        self.snake2 = Snake([Point(17, 19), Point(18, 19), Point(19, 19)], Point(-1, 0)) 
+        self.snake1 = Snake([Point(3, 3), Point(2, 3), Point(1, 3)], Point(1, 0)) 
+        self.snake2 = Snake([Point(28, 30), Point(29, 30), Point(30, 30)], Point(-1, 0)) 
         self.fps = pygame.time.Clock()
         self.fruit = Fruit()
 
@@ -91,21 +96,25 @@ class GameScreen:
             self.handlingCollision2(self.snake2)
 
             self.screen.fill(self.BLACK) # Background
+            pygame.draw.rect(self.screen,self.YELLOW,(0,0,650,24)) # Top Border
+            pygame.draw.rect(self.screen,self.YELLOW,(0,0,22.5,650)) # Left Border
+            pygame.draw.rect(self.screen,self.YELLOW,(0,620,650,30)) # Bot Border
+            pygame.draw.rect(self.screen,self.YELLOW,(620,0,30,650)) # Right Border
 
 
             # Draw score
             score_font = pygame.font.Font(os.path.join('src','assets', 'font.ttf'), 15)
-            score_text = score_font.render('Score:', False, self.WHITE)
-            p1_score = score_font.render(str(self.snake1.snakePoint), False, self.WHITE)
-            p2_score = score_font.render(str(self.snake2.snakePoint), False, self.WHITE)
+            score_text = score_font.render('Score:', False, self.FONT_COLOUR)
+            p1_score = score_font.render(str(self.snake1.snakePoint), False, self.RED)
+            p2_score = score_font.render(str(self.snake2.snakePoint), False, self.CYAN)
             # Draw if not game over
             if not self.STAT_GAME:
                 # Draw player 1 score
                 self.screen.blit(score_text, (15, 10))
                 self.screen.blit(p1_score, (105, 10))
                 # Draw player 2 score
-                self.screen.blit(score_text, (385, 10))
-                self.screen.blit(p2_score, (475, 10))
+                self.screen.blit(score_text, (535, 10))
+                self.screen.blit(p2_score, (625, 10))
                 # Else draw if game over
                 # Draw both players's score
             
@@ -146,7 +155,7 @@ class GameScreen:
         handling collision for snake
         """
         head = self.snake1.snakePosition[0]
-        if head in self.snake1.snakePosition[1:] or head in self.snake2.snakePosition[:] or head.x == -1 or head.x == 20 or head.y == -1 or head.y == 20:
+        if head in self.snake1.snakePosition[1:] or head in self.snake2.snakePosition[:] or head.x == 0 or head.x == 31 or head.y == 0 or head.y == 31:
             if head == self.snake2.snakePosition[0]:
                 self.COLLISION_STAT = 0
             else:
@@ -159,7 +168,7 @@ class GameScreen:
         handling collision for snake
         """
         head = self.snake2.snakePosition[0]
-        if head in self.snake2.snakePosition[1:] or head in self.snake1.snakePosition[:] or head.x == -1 or head.x == 20 or head.y == -1 or head.y == 20:
+        if head in self.snake2.snakePosition[1:] or head in self.snake1.snakePosition[:] or head.x == 0 or head.x == 31 or head.y == 0 or head.y == 31:
             if head == self.snake1.snakePosition[0]:
                 self.COLLISION_STAT = 0
             else:
