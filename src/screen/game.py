@@ -4,7 +4,6 @@ import os
 
 from snake import *
 
-
 class GameScreen:
     """
     Game screen class to handling screen during game operation
@@ -21,7 +20,7 @@ class GameScreen:
     YELLOW = (255,255,0)
     RED = (255,0,0)
     CYAN = (2,243,229)
-    FONT_COLOUR = (239,84,85)
+    FONT_COLOR = (239,84,85)
     HEAD_SNAKE1_COLOR = (120, 0, 0)
     BODY_SNAKE1_COLOR = (193, 18, 31)
     FRUIT_COLOR = (0, 255, 0)
@@ -33,12 +32,11 @@ class GameScreen:
     COLLISION_STAT = -1 # 0 = Tie, 1 = P1 win, 2 = P2 win
     
     # Game status
-    STAT_SIZE = 20
+    STAT_SIZE = 30
     STAT_COLOR = (255, 255, 255)
     STAT_BORDER_COLOR = (255, 0, 0)
-    STAT_POS = (145, 190)
+    STAT_POS = (235, 295)
     STAT_GAME = False # True: Game Over
-
 
     def __init__(self, gameTitle: str):
         """
@@ -47,7 +45,10 @@ class GameScreen:
         @param game_title: Window display title
         """
         pygame.init() # Initialize pygame
-
+        self.SFX_EAT = pygame.mixer.Sound("src/assets/eat.ogg")
+        self.SFX_WIN = pygame.mixer.Sound("src/assets/win.ogg")
+        self.SFX_TIE = pygame.mixer.Sound("src/assets/tie.ogg")
+        self.sfx_play = False
         self.screen = pygame.display.set_mode((self.SCREEN_HEIGHT, self.SCREEN_WIDTH)) # Set mode for game window
         pygame.display.set_caption(gameTitle) # Set caption and title for game's window
 
@@ -57,8 +58,8 @@ class GameScreen:
         """
 
         # Create snake on the screen
-        self.snake1 = Snake([Point(3, 3), Point(2, 3), Point(1, 3)], Point(1, 0)) 
-        self.snake2 = Snake([Point(28, 30), Point(29, 30), Point(30, 30)], Point(-1, 0)) 
+        self.snake1 = Snake([Point(3, 2), Point(2, 2), Point(1, 2)], Point(1, 0)) 
+        self.snake2 = Snake([Point(28, 29), Point(29, 29), Point(30, 29)], Point(-1, 0)) 
         self.fps = pygame.time.Clock()
         self.fruit = [Fruit() for i in range(5)]
         # when apple counting is count to 3 there a one golden apple in there
@@ -82,6 +83,7 @@ class GameScreen:
                 if self.snake1.snakePosition[0] == vF: # snake 1
                     self.snake1.snakeLength += 1
                     self.snake1.snakePoint += 1
+                    self.SFX_EAT.play()
                     self.snake1.snakePosition.append(Point(-1, -1))
                     self.fruit[kF].nextFruitPosition()
                     while (self.fruit[kF] in self.snake1.snakePosition):
@@ -94,6 +96,7 @@ class GameScreen:
                 if self.snake2.snakePosition[0] == vF: # snake 2
                     self.snake2.snakeLength += 1
                     self.snake2.snakePoint += 1
+                    self.SFX_EAT.play()
                     self.snake2.snakePosition.append(Point(-1, -1))
                     self.fruit[kF].nextFruitPosition()
                     while (self.fruit[kF] in self.snake1.snakePosition):
@@ -101,7 +104,6 @@ class GameScreen:
                     self.apple_cnt += 1
 
             self.handlingCollision2(self.snake2)
-
             # handle for apple countting is count to 3
             # when apple counting is 3 generate obstacle
             if self.apple_cnt == 3:
@@ -121,7 +123,7 @@ class GameScreen:
 
             # Draw score
             score_font = pygame.font.Font(os.path.join('src','assets', 'font.ttf'), 15)
-            score_text = score_font.render('Score:', False, self.FONT_COLOUR)
+            score_text = score_font.render('Score:', False, self.FONT_COLOR)
             p1_score = score_font.render(str(self.snake1.snakePoint), False, self.RED)
             p2_score = score_font.render(str(self.snake2.snakePoint), False, self.CYAN)
             # Draw if not game over
@@ -140,10 +142,18 @@ class GameScreen:
                 get_font = pygame.font.Font(os.path.join('src','assets', 'font.ttf'), self.STAT_SIZE)
                 if self.COLLISION_STAT == 0:
                     text = get_font.render('TIE', True, self.STAT_COLOR, self.STAT_BORDER_COLOR)
+                    sfx_get = self.SFX_TIE
                 elif self.COLLISION_STAT == 1:
                     text = get_font.render('P1 Win', True, self.STAT_COLOR, self.STAT_BORDER_COLOR)
+                    sfx_get = self.SFX_WIN
                 elif self.COLLISION_STAT == 2:
                     text = get_font.render('P2 Win', True, self.STAT_COLOR, self.STAT_BORDER_COLOR)
+                    sfx_get = self.SFX_WIN
+                if self.sfx_play == False:
+                    sfx_get.play()
+                    self.sfx_play = True
+
+
                 self.screen.blit(text, self.STAT_POS)
                 events = pygame.event.get()
                 ########################
