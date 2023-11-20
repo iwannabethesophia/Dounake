@@ -64,6 +64,8 @@ class GameScreen:
         # when apple counting is count to 3 there a one golden apple in there
         self.apple_cnt = 0
 
+        self.obstacle_list = []
+
         # Handler variable for game window running
         self.gameRunning = True
 
@@ -101,11 +103,14 @@ class GameScreen:
             self.handlingCollision2(self.snake2)
 
             # handle for apple countting is count to 3
+            # when apple counting is 3 generate obstacle
             if self.apple_cnt == 3:
                 i = random.randint(0, 4)
                 # set a random apple to golden apple
                 self.fruit[i].is_golden = True
                 self.apple_cnt = 0
+
+                self.generate_obstacle()
 
             self.screen.fill(self.BLACK) # Background
             pygame.draw.rect(self.screen,self.YELLOW,(0,0,650,24))   # Top Border
@@ -159,6 +164,8 @@ class GameScreen:
                 self.snake1.updateSnakeByDirection()
                 self.snake2.updateSnakeByDirection()
 
+            self.draw_obstacle()
+
             pygame.display.update() 
             self.fps.tick(self.FPS)  # Speed of Snake
 
@@ -167,7 +174,7 @@ class GameScreen:
         handling collision for snake
         """
         head = self.snake1.snakePosition[0]
-        if head in self.snake1.snakePosition[1:] or head in self.snake2.snakePosition[:] or head.x == 0 or head.x == 31 or head.y == 0 or head.y == 31:
+        if head in self.snake1.snakePosition[1:] or head in self.snake2.snakePosition[:] or head.x == 0 or head.x == 31 or head.y == 0 or head.y == 31 or head in self.obstacle_list:
             if head == self.snake2.snakePosition[0]:
                 self.COLLISION_STAT = 0
             else:
@@ -180,13 +187,22 @@ class GameScreen:
         handling collision for snake
         """
         head = self.snake2.snakePosition[0]
-        if head in self.snake2.snakePosition[1:] or head in self.snake1.snakePosition[:] or head.x == 0 or head.x == 31 or head.y == 0 or head.y == 31:
+        if head in self.snake2.snakePosition[1:] or head in self.snake1.snakePosition[:] or head.x == 0 or head.x == 31 or head.y == 0 or head.y == 31 or head in self.obstacle_list:
             if head == self.snake1.snakePosition[0]:
                 self.COLLISION_STAT = 0
             else:
                 self.COLLISION_STAT = 1
             self.STAT_GAME = True
             return
+
+    def generate_obstacle(self):
+        self.obstacle_list.append(Obstacle())
+        while self.obstacle_list[-1] in self.snake1.snakePosition or self.obstacle_list[-1] in self.snake2.snakePosition:
+            self.obstacle_list[-1].nextPosition()
+
+    def draw_obstacle(self):
+        for k, v in enumerate(self.obstacle_list):
+            pygame.draw.rect(self.screen, self.WHITE, v.axisToRect(20))
 
     def drawBareboneSnake1(self, snake: Snake) -> None:
         """
