@@ -1,5 +1,6 @@
 import pygame
 import sys
+import dn_lib as switches
 
 from button import Button
 from screen import GameScreen
@@ -109,7 +110,7 @@ class TitleScreen():
             
             # SFX changing button
             global sfx_stat
-            if (self.sfx_stat == True):
+            if (switches.sfx_switch == True):
                 SFX_STAT = Button(image=None, pos=(250, 500-dp), 
                                 text_input="ON", font=self.get_font(40), base_color=self.WHITE, hovering_color=self.GREEN)
                 #turned on sfx
@@ -127,7 +128,7 @@ class TitleScreen():
             
             # BGM changing button
             global bgm_stat
-            if (self.bgm_stat == True):
+            if (switches.bgm_switch == True):
                 pygame.mixer.music.set_volume(100)
                 BGM_STAT = Button(image=None, pos=(250, 575-dp), 
                                 text_input="ON", font=self.get_font(40), base_color=self.WHITE, hovering_color=self.GREEN)
@@ -149,16 +150,16 @@ class TitleScreen():
                         self.main_menu()
                     if SFX_STAT.checkForInput(OPTIONS_MOUSE_POS):
                         self.sfx_confirm.play()
-                        if self.sfx_stat == True:
-                            self.sfx_stat = False
+                        if switches.sfx_switch == True:
+                            switches.sfx_switch = False
                         else:
-                            self.sfx_stat = True
+                            switches.sfx_switch = True
                     if BGM_STAT.checkForInput(OPTIONS_MOUSE_POS):
                         self.sfx_confirm.play()
-                        if self.bgm_stat == True:
-                            self.bgm_stat = False
+                        if switches.bgm_switch == True:
+                            switches.bgm_switch = False
                         else:
-                            self.bgm_stat = True
+                            switches.bgm_switch = True
             pygame.display.update()
 
     def main_menu(self):

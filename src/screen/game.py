@@ -1,6 +1,7 @@
 import pygame
 import sys
 import os
+import dn_lib as switches
 
 from snake import *
 
@@ -81,24 +82,20 @@ class GameScreen:
             # handling fruit eat event
             for kF, vF in enumerate(self.fruit):
                 if self.snake1.snakePosition[0] == vF: # snake 1
-<<<<<<< HEAD
                     if vF.is_golden:
                         self.snake1.snakeLength += 3
                         self.snake1.snakePoint += 3
+                        if switches.sfx_switch == True:
+                            self.SFX_EAT.play()
                         for i in range(3):
                             self.snake1.snakePosition.append(Point(-1, -1))
                     else:
                         self.snake1.snakeLength += 1
                         self.snake1.snakePoint += 1
+                        if switches.sfx_switch == True:
+                            self.SFX_EAT.play()
                         self.snake1.snakePosition.append(Point(-1, -1))
                         self.fruit[kF].nextFruitPosition()
-=======
-                    self.snake1.snakeLength += 1
-                    self.snake1.snakePoint += 1
-                    self.SFX_EAT.play()
-                    self.snake1.snakePosition.append(Point(-1, -1))
-                    self.fruit[kF].nextFruitPosition()
->>>>>>> 0d41dd63d116c5b1ca6f2888d5f358311ce0f701
                     while (self.fruit[kF] in self.snake1.snakePosition):
                         self.fruit[kF].nextFruitPosition()
                     self.fruit[kF].is_golden = False
@@ -108,22 +105,19 @@ class GameScreen:
 
             for kF, vF in enumerate(self.fruit):
                 if self.snake2.snakePosition[0] == vF: # snake 2
-<<<<<<< HEAD
                     if vF.is_golden:
                         self.snake2.snakeLength += 3
                         self.snake2.snakePoint += 3
+                        if switches.sfx_switch == True:
+                            self.SFX_EAT.play()
                         for i in range(3):
                             self.snake2.snakePosition.append(Point(-1, -1))
                     else:
                         self.snake2.snakeLength += 1
                         self.snake2.snakePoint += 1
+                        if switches.sfx_switch == True:
+                            self.SFX_EAT.play()
                         self.snake2.snakePosition.append(Point(-1, -1))
-=======
-                    self.snake2.snakeLength += 1
-                    self.snake2.snakePoint += 1
-                    self.SFX_EAT.play()
-                    self.snake2.snakePosition.append(Point(-1, -1))
->>>>>>> 0d41dd63d116c5b1ca6f2888d5f358311ce0f701
                     self.fruit[kF].nextFruitPosition()
                     while (self.fruit[kF] in self.snake1.snakePosition):
                         self.fruit[kF].nextFruitPosition()
@@ -177,7 +171,9 @@ class GameScreen:
                     text = get_font.render('P2 Win', True, self.STAT_COLOR, self.STAT_BORDER_COLOR)
                     sfx_get = self.SFX_WIN
                 if self.sfx_play == False:
-                    sfx_get.play()
+                    if switches.sfx_switch == True:
+                        sfx_get.play()
+                        pygame.mixer.music.stop()
                     self.sfx_play = True
 
 
