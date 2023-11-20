@@ -80,24 +80,38 @@ class GameScreen:
             # handling fruit eat event
             for kF, vF in enumerate(self.fruit):
                 if self.snake1.snakePosition[0] == vF: # snake 1
-                    self.snake1.snakeLength += 1
-                    self.snake1.snakePoint += 1
-                    self.snake1.snakePosition.append(Point(-1, -1))
-                    self.fruit[kF].nextFruitPosition()
+                    if vF.is_golden:
+                        self.snake1.snakeLength += 3
+                        self.snake1.snakePoint += 3
+                        for i in range(3):
+                            self.snake1.snakePosition.append(Point(-1, -1))
+                    else:
+                        self.snake1.snakeLength += 1
+                        self.snake1.snakePoint += 1
+                        self.snake1.snakePosition.append(Point(-1, -1))
+                        self.fruit[kF].nextFruitPosition()
                     while (self.fruit[kF] in self.snake1.snakePosition):
                         self.fruit[kF].nextFruitPosition()
+                    self.fruit[kF].is_golden = False
                     self.apple_cnt += 1
 
             self.handlingCollision1(self.snake1)
 
             for kF, vF in enumerate(self.fruit):
                 if self.snake2.snakePosition[0] == vF: # snake 2
-                    self.snake2.snakeLength += 1
-                    self.snake2.snakePoint += 1
-                    self.snake2.snakePosition.append(Point(-1, -1))
+                    if vF.is_golden:
+                        self.snake2.snakeLength += 3
+                        self.snake2.snakePoint += 3
+                        for i in range(3):
+                            self.snake2.snakePosition.append(Point(-1, -1))
+                    else:
+                        self.snake2.snakeLength += 1
+                        self.snake2.snakePoint += 1
+                        self.snake2.snakePosition.append(Point(-1, -1))
                     self.fruit[kF].nextFruitPosition()
                     while (self.fruit[kF] in self.snake1.snakePosition):
                         self.fruit[kF].nextFruitPosition()
+                    self.fruit[kF].is_golden = False
                     self.apple_cnt += 1
 
             self.handlingCollision2(self.snake2)
