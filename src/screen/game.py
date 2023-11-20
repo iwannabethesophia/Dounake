@@ -174,11 +174,11 @@ class GameScreen:
             if (self.STAT_GAME == False):
                 self.drawBareboneSnake1(self.snake1) # Draw snake 1
                 self.drawBareboneSnake2(self.snake2) # Draw snake 2
+                self.draw_obstacle()
 
                 self.snake1.updateSnakeByDirection()
                 self.snake2.updateSnakeByDirection()
 
-            self.draw_obstacle()
 
             pygame.display.update() 
             self.fps.tick(self.FPS)  # Speed of Snake
