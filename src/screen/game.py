@@ -24,7 +24,8 @@ class GameScreen:
     FONT_COLOUR = (239,84,85)
     HEAD_SNAKE1_COLOR = (120, 0, 0)
     BODY_SNAKE1_COLOR = (193, 18, 31)
-    FRUIT_COLOR = (253, 240, 213)
+    FRUIT_COLOR = (0, 255, 0)
+    GOLDEN_FRUIT_COLOR = (255,215,0)
     HEAD_SNAKE2_COLOR = (26, 83, 92)
     BODY_SNAKE2_COLOR = (102, 155, 188)
     
@@ -59,7 +60,9 @@ class GameScreen:
         self.snake1 = Snake([Point(3, 3), Point(2, 3), Point(1, 3)], Point(1, 0)) 
         self.snake2 = Snake([Point(28, 30), Point(29, 30), Point(30, 30)], Point(-1, 0)) 
         self.fps = pygame.time.Clock()
-        self.fruit = Fruit()
+        self.fruit = [Fruit() for i in range(5)]
+        # when apple counting is count to 3 there a one golden apple in there
+        self.apple_cnt = 0
 
         # Handler variable for game window running
         self.gameRunning = True
@@ -71,32 +74,41 @@ class GameScreen:
                     sys.exit(0)
 
                 self.handlingDirectionEvent(event) # Event for snake 1
-            
+
             # handling fruit eat event
-            if self.snake1.snakePosition[0] == self.fruit: # Snake 1
-                self.snake1.snakeLength += 1
-                self.snake1.snakePoint +=1
-                self.snake1.snakePosition.append(Point(-1, -1))
-                self.fruit.nextFruitPosition()
-                while (self.fruit in self.snake1.snakePosition):
-                    self.fruit.nextFruitPosition()
+            for kF, vF in enumerate(self.fruit):
+                if self.snake1.snakePosition[0] == vF: # snake 1
+                    self.snake1.snakeLength += 1
+                    self.snake1.snakePoint += 1
+                    self.snake1.snakePosition.append(Point(-1, -1))
+                    self.fruit[kF].nextFruitPosition()
+                    while (self.fruit[kF] in self.snake1.snakePosition):
+                        self.fruit[kF].nextFruitPosition()
+                    self.apple_cnt += 1
 
             self.handlingCollision1(self.snake1)
 
-
-            if self.snake2.snakePosition[0] == self.fruit: # Snake 2
-                self.snake2.snakeLength += 1
-                self.snake2.snakePoint += 1
-                self.snake2.snakePosition.append(Point(-1, -1))
-                self.fruit.nextFruitPosition()
-                while (self.fruit in self.snake2.snakePosition):
-                    if not self.STAT_GAME:
-                        self.fruit.nextFruitPosition()
+            for kF, vF in enumerate(self.fruit):
+                if self.snake2.snakePosition[0] == vF: # snake 2
+                    self.snake2.snakeLength += 1
+                    self.snake2.snakePoint += 1
+                    self.snake2.snakePosition.append(Point(-1, -1))
+                    self.fruit[kF].nextFruitPosition()
+                    while (self.fruit[kF] in self.snake1.snakePosition):
+                        self.fruit[kF].nextFruitPosition()
+                    self.apple_cnt += 1
 
             self.handlingCollision2(self.snake2)
 
+            # handle for apple countting is count to 3
+            if self.apple_cnt == 3:
+                i = random.randint(0, 4)
+                # set a random apple to golden apple
+                self.fruit[i].is_golden = True
+                self.apple_cnt = 0
+
             self.screen.fill(self.BLACK) # Background
-            pygame.draw.rect(self.screen,self.YELLOW,(0,0,650,24)) # Top Border
+            pygame.draw.rect(self.screen,self.YELLOW,(0,0,650,24))   # Top Border
             pygame.draw.rect(self.screen,self.YELLOW,(0,0,22.5,650)) # Left Border
             pygame.draw.rect(self.screen,self.YELLOW,(0,620,650,30)) # Bot Border
             pygame.draw.rect(self.screen,self.YELLOW,(620,0,30,650)) # Right Border
@@ -190,7 +202,11 @@ class GameScreen:
         for i in range(1, len(snakePositionVector)):
             pygame.draw.rect(self.screen, self.BODY_SNAKE1_COLOR, snakePositionVector[i].axisToRect(20))
 
-        pygame.draw.rect(self.screen, self.FRUIT_COLOR, self.fruit.axisToRect(20))
+        for kF, vF in enumerate(self.fruit):
+            if not vF.is_golden:
+                pygame.draw.rect(self.screen, self.FRUIT_COLOR, vF.axisToRect(20))
+            else:
+                pygame.draw.rect(self.screen, self.GOLDEN_FRUIT_COLOR, vF.axisToRect(20))
 
     def drawBareboneSnake2(self, snake: Snake) -> None:
         """
@@ -206,7 +222,11 @@ class GameScreen:
         for i in range(1, len(snakePositionVector)):
             pygame.draw.rect(self.screen, self.BODY_SNAKE2_COLOR, snakePositionVector[i].axisToRect(20))
 
-        pygame.draw.rect(self.screen, self.FRUIT_COLOR, self.fruit.axisToRect(20))
+        for kF, vF in enumerate(self.fruit):
+            if not vF.is_golden:
+                pygame.draw.rect(self.screen, self.FRUIT_COLOR, vF.axisToRect(20))
+            else:
+                pygame.draw.rect(self.screen, self.GOLDEN_FRUIT_COLOR, vF.axisToRect(20))
 
     def handlingDirectionEvent(self, event: pygame.event.Event) -> None:
         """
