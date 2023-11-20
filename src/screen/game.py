@@ -12,24 +12,24 @@ class GameScreen:
     SCREEN_HEIGHT = 650 # Game screen height size 31x31
     SCREEN_WIDTH = 650 # Game screen width size 31x31
     
-    FPS = 10 # Speed of Snake
+    FPS = 14 # Speed of Snake
     
     # Color
     BLACK = (0,0,0)
-    WHITE = (255, 255, 255)
+    WHITE = (255,255,255)
     GREEN = (0,255,0)
     YELLOW = (255,255,0)
     RED = (255,0,0)
     CYAN = (2,243,229)
     FONT_COLOR = (239,84,85)
-    HEAD_SNAKE1_COLOR = (120, 0, 0)
-    BODY_SNAKE1_COLOR = (193, 18, 31)
-    FRUIT_COLOR = (0, 255, 0)
+    HEAD_SNAKE1_COLOR = (120,0,0)
+    BODY_SNAKE1_COLOR = (193,18,31)
+    FRUIT_COLOR = (0,255,0)
     GOLDEN_FRUIT_COLOR = (255,215,0)
-    HEAD_SNAKE2_COLOR = (26, 83, 92)
-    BODY_SNAKE2_COLOR = (102, 155, 188)
+    HEAD_SNAKE2_COLOR = (26,83,92)
+    BODY_SNAKE2_COLOR = (102,155,188)
     
-    #collision status
+    # Collision status
     COLLISION_STAT = -1 # 0 = Tie, 1 = P1 win, 2 = P2 win
     
     # Game status
@@ -46,9 +46,11 @@ class GameScreen:
         @param game_title: Window display title
         """
         pygame.init() # Initialize pygame
-        self.SFX_EAT = pygame.mixer.Sound("src/assets/eat.ogg")
-        self.SFX_WIN = pygame.mixer.Sound("src/assets/win.ogg")
-        self.SFX_TIE = pygame.mixer.Sound("src/assets/tie.ogg")
+        
+        #SFX when End game
+        self.SFX_EAT = pygame.mixer.Sound(os.path.join('src','assets', 'eat.ogg'))
+        self.SFX_WIN = pygame.mixer.Sound(os.path.join('src','assets', 'win.ogg'))
+        self.SFX_TIE = pygame.mixer.Sound(os.path.join('src','assets', 'tie.ogg'))
         self.sfx_play = False
         self.screen = pygame.display.set_mode((self.SCREEN_HEIGHT, self.SCREEN_WIDTH)) # Set mode for game window
         pygame.display.set_caption(gameTitle) # Set caption and title for game's window
@@ -63,7 +65,7 @@ class GameScreen:
         self.snake2 = Snake([Point(28, 29), Point(29, 29), Point(30, 29)], Point(-1, 0)) 
         self.fps = pygame.time.Clock()
         self.fruit = [Fruit() for i in range(5)]
-        # when apple counting is count to 3 there a one golden apple in there
+        # When apple counting == 3 -> 1 golden apple
         self.apple_cnt = 0
 
         self.obstacle_list = []
@@ -79,9 +81,9 @@ class GameScreen:
 
                 self.handlingDirectionEvent(event) # Event for snake 1
 
-            # handling fruit eat event
+            # Handling fruit eat event
             for kF, vF in enumerate(self.fruit):
-                if self.snake1.snakePosition[0] == vF: # snake 1
+                if self.snake1.snakePosition[0] == vF: # Snake 1
                     if vF.is_golden:
                         self.snake1.snakeLength += 3
                         self.snake1.snakePoint += 3
@@ -104,7 +106,7 @@ class GameScreen:
             self.handlingCollision1(self.snake1)
 
             for kF, vF in enumerate(self.fruit):
-                if self.snake2.snakePosition[0] == vF: # snake 2
+                if self.snake2.snakePosition[0] == vF: # Snake 2
                     if vF.is_golden:
                         self.snake2.snakeLength += 3
                         self.snake2.snakePoint += 3
@@ -125,11 +127,11 @@ class GameScreen:
                     self.apple_cnt += 1
 
             self.handlingCollision2(self.snake2)
-            # handle for apple countting is count to 3
-            # when apple counting is 3 generate obstacle
+            # Handle for apple counting is count to 3
+            # When apple counting is 3 generate obstacle
             if self.apple_cnt == 3:
                 i = random.randint(0, 4)
-                # set a random apple to golden apple
+                # Set a random apple to golden apple
                 self.fruit[i].is_golden = True
                 self.apple_cnt = 0
 
@@ -179,13 +181,10 @@ class GameScreen:
 
                 self.screen.blit(text, self.STAT_POS)
                 events = pygame.event.get()
-                ########################
                 for event in events:
                     if event.type == pygame.K_SPACE:
-                        # Return to title screen, but will be done later
                         pygame.quit()
                         sys.exit()
-                ########################
                     if event.type == pygame.KEYDOWN and event.type == pygame.QUIT:
                         pygame.quit()
                         sys.exit() 

@@ -6,8 +6,6 @@ from button import Button
 from screen import GameScreen
 
 class TitleScreen():
-    # Display screen could be change later.
-    # 400x400 should be for gameplay. The window screen should be larger
     # The Title screen should follow the width and height window of gameplay.
     SCREEN_WIDTH = 650
     SCREEN_HEIGHT = 650
@@ -40,12 +38,10 @@ class TitleScreen():
         return pygame.font.Font("src/assets/font.ttf", size)
 
     def play(self): 
-        # The play button (on maintain :<).  Need to connect to the main.py
-        # print("Hello, this is play button")
         play_game = GameScreen("Dounake")
         play_game.gameLoop()
 
-    def options(self): # Recommend define all the button outside then connect them into options!!!
+    def options(self):
         while True:
             OPTIONS_MOUSE_POS = pygame.mouse.get_pos()
             BOX = pygame.image.load("src/assets/Unfilled_box.png")
@@ -59,7 +55,7 @@ class TitleScreen():
             OPTIONS_BACK.changeColor(OPTIONS_MOUSE_POS)
             OPTIONS_BACK.update(self.SCREEN)
 
-            # Player 1 changing button
+            # Player 1 show button
             OPTIONS_PLAYER_1 = Button(image=None, pos=(50+dp, 150+dp), 
                                 text_input="P1", font=self.get_font(40), base_color=self.WHITE, hovering_color=self.GREEN)
             OPTIONS_PLAYER_1.update(self.SCREEN)
@@ -80,7 +76,7 @@ class TitleScreen():
             P1_LEFT.update(self.SCREEN)
             P1_RIGHT.update(self.SCREEN)
 
-            # Player 2 changing button
+            # Player 2 show button
             OPTIONS_PLAYER_2 = Button(image=None, pos=(50+dp, 250+dp), 
                                 text_input="P2", font=self.get_font(40), base_color=self.WHITE, hovering_color=self.GREEN)
             OPTIONS_PLAYER_2.update(self.SCREEN)
@@ -113,14 +109,12 @@ class TitleScreen():
             if (switches.sfx_switch == True):
                 SFX_STAT = Button(image=None, pos=(250, 500-dp), 
                                 text_input="ON", font=self.get_font(40), base_color=self.WHITE, hovering_color=self.GREEN)
-                #turned on sfx
                 self.sfx_confirm.set_volume(100)
                 self.sfx_back.set_volume(100)
                 
             else:
                 SFX_STAT = Button(image=None, pos=(250, 500-dp), 
                                 text_input="OFF", font=self.get_font(40), base_color=self.WHITE, hovering_color=self.GREEN)
-                #turned off sfx
                 self.sfx_confirm.set_volume(0)
                 self.sfx_back.set_volume(0)
             SFX_STAT.changeColor(OPTIONS_MOUSE_POS)

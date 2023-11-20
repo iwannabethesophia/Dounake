@@ -3,7 +3,7 @@ from .point import Point
 import random
 
 class Fruit(Point):
-    # variable for handling the golden apple
+    # Variable for handling the golden apple
     is_golden = False
 
     def __init__(self, x = None, y = None):

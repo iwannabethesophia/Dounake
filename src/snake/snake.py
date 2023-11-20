@@ -12,7 +12,7 @@ class Snake:
         @param direction: default direction of snake moving
         """
 
-        self.snakeLength = 3 #default snake length
+        self.snakeLength = 3 # Default snake length
         self.snakePoint = 0
         assert self.snakeLength == len(startPos)
         # x, y
@@ -20,11 +20,10 @@ class Snake:
         # 0,-1 -> up
         # 1, 0 -> right
         #-1, 0 -> left
-        # current snake direction
+        # Current snake direction
         self.snakeDirection = direction
 
-        # a vector storing list of position
-        # for a map with 20x20 head at position (x, y) = (0, 2)
+        # A vector storing list of position
         self.snakePosition = startPos
 
     def updateSnakeByDirection(self) -> None:
